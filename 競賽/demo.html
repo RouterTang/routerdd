@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>汪汪小狗測驗</title>
+    <style>
+        body {
+            background-color: #f5f5dc; 
+            font-family: Arial, sans-serif;
+            margin: 0; 
+            padding: 0; 
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* 標題顏色 */
+            margin-top: 20px;
+            font-size: 40px;
+        }
+
+        p#demo, p {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0; /* 上下間距 */
+            color: #34495e; 
+        }
+
+        button {
+            font-size: 20px;
+            padding: 15px 30px;
+            margin: 15px;
+            border-radius: 10px;
+            background-color: #e74c3c; /* 按鈕顏色 */
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: block;
+            width: 220px; /* 按鈕寬度 */
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        }
+
+        button:hover {
+            background-color: #c0392b; 
+        }
+
+        #secondQuestion, #thirdQuestion, #resultSection {
+            display: none; 
+        }
+
+        #resultSection {
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #2980b9; /* 結果邊框 */
+            border-radius: 10px; /* 圓角 */
+            background-color: #ecf0f1; /* 結果背景色 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+        }
+
+        .final-button {
+            font-size: 40px; 
+            padding: 30px 50px; 
+            background-color: #f1c40f; 
+            border-radius: 15px; 
+            color: #2c3e50; 
+            width: 800px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            transition: background-color 0.3s; /* 效果 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 陰影 */
+        }
+
+        .final-button:hover {
+            background-color: #f39c12; 
+        }
+
+        /* 新增圖片樣式 */
+        .result-image {
+            width: 300px; /* 寬度 */
+            margin-top: 20px; /* 圖片間距 */
+            cursor: pointer; /* 變化 */
+            border-radius: 10px; /* 圓角 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+        }
+    </style>
+    <script>
+        var totalPoints = 0;  
+        var profession = "";  
+        var personality = ""; 
+        var livingPlace = ""; 
+
+        // 分數累加
+        function handleSelection(sectionToHide, sectionToShow, points) {
+            totalPoints += points; 
+            document.getElementById(sectionToHide).style.display = "none";
+            document.getElementById(sectionToShow).style.display = "block";
+        }
+
+        function selectProfession(selectedProfession, points) {
+            profession = selectedProfession; 
+            document.getElementById("demo").innerHTML = ""; 
+            handleSelection('firstQuestion', 'secondQuestion', points); 
+        }
+
+        function selectPersonality(selectedPersonality, points) {
+            personality = selectedPersonality;
+            handleSelection('secondQuestion', 'thirdQuestion', points);
+        }
+
+        function selectLivingPlace(selectedPlace, points) {
+            livingPlace = selectedPlace; 
+            totalPoints += points; 
+            document.getElementById('thirdQuestion').style.display = "none"; 
+            displayResult(); 
+        }
+
+        function displayResult() {
+            const resultSection = document.getElementById("resultSection");
+            resultSection.innerHTML = "";
+
+            resultSection.innerHTML += 
+                "<p id='finalResult'>" +
+                "您的職業是: " + profession + "<br>" +
+                "您的個性是: " + personality + "<br>" +
+                "您現在居住在: " + livingPlace + "<br>" +
+                "您最適合的是:" + 
+                "</p>";
+
+            const openImageButton = document.createElement('button');
+            openImageButton.innerText = "點擊這裡查看您的結果";
+            openImageButton.className = "final-button"; 
+            
+            openImageButton.onclick = function() {
+                if (totalPoints === 12) {
+                    displayImage("th.jpg", "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=8278937&Area=search&mdiv=403&oid=1_1&cid=index&kw=%E7%8B%97%E9%A3%BC%E6%96%99"); // 總分為12時打開 th.jpg
+                } else if (totalPoints === 13) {
+                    displayImage("a.jpg", "https://www.momoshop.com.tw/goods/GoodsDetail.jsp?i_code=8278935&str_category_code=4700200084&mdiv=4700200084-bt_9_002_01&ctype=B&Area=DgrpCategory"); // 總分為13時打開 a.jpg
+                } else {
+                    alert("您沒有符合條件的結果！"); 
+                }
+            };
+            resultSection.appendChild(openImageButton); 
+
+            resultSection.style.display = "block";
+        }
+
+        function displayImage(imageUrl, redirectUrl) {
+            const resultSection = document.getElementById("resultSection");
+            const imageElement = document.createElement('img');
+            imageElement.src = imageUrl; 
+            imageElement.className = "result-image"; 
+            imageElement.onclick = function() {
+                window.location.href = redirectUrl; 
+            };
+            resultSection.appendChild(imageElement); 
+        }
+    </script>
+</head>
+
+<body>
+    <h1>汪汪小狗測驗</h1>
+    <p id="demo">請問您的職業?</p>
+
+    <!-- 第一問題 -->
+    <div id="firstQuestion">
+        <button type="button" onclick="selectProfession('在職', 1)">在職</button>
+        <button type="button" onclick="selectProfession('學生', 2)">學生</button>
+        <button type="button" onclick="selectProfession('自由工作者', 3)">自由工作者</button>
+    </div>
+
+    <!-- 第二問題 -->
+    <div id="secondQuestion">
+        <p>請問您的個性類型?</p>
+        <button type="button" onclick="selectPersonality('熱情/外向', 4)">熱情/外向</button>
+        <button type="button" onclick="selectPersonality('平淡/冷靜', 5)">平淡/冷靜</button>
+        <button type="button" onclick="selectPersonality('隨和/和善', 6)">隨和/和善</button>
+    </div>
+
+    <!-- 第三問題 -->
+    <div id="thirdQuestion">
+        <p>請問您現在居住在何種環境?</p>
+        <button type="button" onclick="selectLivingPlace('透天', 7)">透天</button>
+        <button type="button" onclick="selectLivingPlace('大樓', 8)">大樓</button>
+    </div>
+
+    <!-- 結果 -->
+    <div id="resultSection"></div>
+</body>
+
+</html>

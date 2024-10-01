@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>汪汪小狗測驗</title>
+    <style>
+        body {
+            background-color: bisque;
+            font-family: Arial, sans-serif;
+        }
+
+        /* 增加問題文字的字體大小 */
+        p#demo, p {
+            font-size: 35px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 增加按鈕的大小 */
+        button {
+            font-size: 25px;
+            padding: 15px 30px;
+            margin: 15px;
+            border-radius: 10px;
+            background-color: lightcoral;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: block;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 按鈕懸停效果 */
+        button:hover {
+            background-color: darkred;
+        }
+
+        #secondQuestion, #thirdQuestion, #resultSection {
+            display: none; /* 隱藏下一層問題和結果 */
+        }
+
+        /* 優化結果展示樣式 */
+        #resultSection {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        var totalPoints = 0;  // 初始化總分變量
+        var profession = "";  // 職業
+        var personality = ""; // 個性
+        var livingPlace = ""; // 居住地
+
+        // 通用處理選項選擇和分數累加的函數
+        function handleSelection(sectionToHide, sectionToShow, points) {
+            totalPoints += points; // 累加分數
+            document.getElementById(sectionToHide).style.display = "none"; // 隱藏當前問題
+            document.getElementById(sectionToShow).style.display = "block"; // 顯示下一層問題
+        }
+
+        // 第一層處理職業選擇
+        function selectProfession(selectedProfession, points) {
+            profession = selectedProfession; // 儲存職業
+            document.getElementById("demo").innerHTML = ""; // 隱藏選擇結果
+            handleSelection('firstQuestion', 'secondQuestion', points); // 隱藏第一層，顯示第二層
+        }
+
+        // 第二層處理個性選擇
+        function selectPersonality(selectedPersonality, points) {
+            personality = selectedPersonality; // 儲存個性
+            totalPoints += points; // 累加分數
+            document.getElementById('secondQuestion').style.display = "none"; // 隱藏第二層
+            document.getElementById('thirdQuestion').style.display = "block"; // 顯示第三層
+        }
+
+        // 第三層處理居住環境選擇，顯示最終結果
+        function selectLivingPlace(selectedPlace, points) {
+            livingPlace = selectedPlace; // 儲存居住地
+            totalPoints += points; // 累加分數
+            document.getElementById('thirdQuestion').style.display = "none"; // 隱藏第三層
+            displayResult(); // 顯示結果
+        }
+
+        // 顯示最終結果
+        function displayResult() {
+            document.getElementById("finalResult").innerHTML = 
+                "您的職業是: " + profession + "<br>" +
+                "您的個性是: " + personality + "<br>" +
+                "您現在居住在: " + livingPlace + "<br>";
+            document.getElementById("resultSection").style.display = "block"; // 顯示結果區域
+        }
+    </script>
+</head>
+
+<body>
+    <p id="demo">請問您的職業?</p>
+
+    <!-- 第一層問題 -->
+    <div id="firstQuestion">
+        <button type="button" onclick="selectProfession('在職', 1)">在職</button>
+        <button type="button" onclick="selectProfession('學生', 2)">學生</button>
+        <button type="button" onclick="selectProfession('自由工作者', 3)">自由工作者</button>
+    </div>
+
+    <!-- 第二層問題 -->
+    <div id="secondQuestion">
+        <p>請問您的個性類型?</p>
+        <button type="button" onclick="selectPersonality('熱情/外向', 4)">熱情/外向</button>
+        <button type="button" onclick="selectPersonality('平淡/冷靜', 5)">平淡/冷靜</button>
+        <button type="button" onclick="selectPersonality('隨和/和善', 6)">隨和/和善</button>
+    </div>
+
+    <!-- 第三層問題 -->
+    <div id="thirdQuestion">
+        <p>請問您現在居住在何種環境?</p>
+        <button type="button" onclick="selectLivingPlace('大樓', 7)">大樓</button>
+        <button type="button" onclick="selectLivingPlace('透天', 8)">透天</button>
+    </div>
+
+    <!-- 最終結果 -->
+    <div id="resultSection">
+        <p id="finalResult"></p>
+    </div>
+</body>
+
+</html>
